@@ -1,0 +1,16 @@
+# --- Java / Spring Boot ---
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/.idea/
+backend/*.iml
+backend/help.md
+
+# --- React / Node ---
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+.env
+.DS_Store
