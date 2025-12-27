@@ -1,56 +1,96 @@
-# 📝 Simple Blog Web Application - Setup Guide
+# 📝 BlogSite - Web Application Project
 
-This project is a full-stack web application using **React (Frontend)** and **Spring Boot (Backend)** with **MySQL** as the database.
+A full-stack blog application built with **Spring Boot** (Backend) and **React** (Frontend).
 
-## 🚀 Prerequisites
-* [XAMPP](https://www.apachefriends.org/index.html) (for MySQL Database)
-* Java Development Kit (JDK) 17 or later
-* Node.js & npm
+## 📋 Prerequisites & Installation
+
+Before running this project, you must install the necessary tools.
+
+### 1️⃣ Backend Requirements: Java Development Kit (JDK)
+The backend is built using **Java Spring Boot**. You need the Java Development Kit (JDK) to run it.
+
+* **Download:** [Oracle JDK](https://www.oracle.com/java/technologies/downloads/) or [OpenJDK](https://adoptium.net/) (Version 17 or higher is recommended).
+* **Verify Installation:**
+    Open your terminal/command prompt and type:
+    ```bash
+    java -version
+    ```
+
+### 2️⃣ Frontend Requirements: Node.js & NPM
+The frontend is built using **React**. You need Node.js to manage dependencies and run the server.
+
+* **Download:** [Node.js LTS Version](https://nodejs.org/en/).
+* **Verify Installation:**
+    Open your terminal and type:
+    ```bash
+    node -v
+    npm -v
+    ```
+
+### 3️⃣ Database Requirements: XAMPP (MySQL)
+This project uses **MySQL** as the database. The easiest way to set this up is using XAMPP.
+
+* **Download:** [XAMPP Installer](https://www.apachefriends.org/index.html).
+* **Setup:** Install and open the **XAMPP Control Panel**. Start the **Apache** and **MySQL** modules.
 
 ---
 
-## 🛠️ Step 1: Configure the Database (XAMPP)
+## ⚠️ IMPORTANT: Port Consistency Configuration
 
-1.  **Start XAMPP Control Panel.**
-2.  Click **Start** next to **Apache** and **MySQL**.
-3.  Open your browser and go to: [http://localhost/phpmyadmin](http://localhost/phpmyadmin).
-4.  Click **New** on the left sidebar.
-5.  **Database Name:** Type `blog_db` (or whatever name is in your backend `application.properties`).
-6.  **Collation:** Select `utf8mb4_general_ci`.
-7.  Click **Create**.
+For the application to communicate correctly, **Ports must match** the default configuration.
+
+| Component | Required Port | Why? |
+| :--- | :--- | :--- |
+| **Frontend (React)** | `3000` | The backend `CorsConfig` is set to allow requests specifically from `http://localhost:3000`. |
+| **Backend (Java)** | `8080` | The frontend API calls are hardcoded to `http://localhost:8080`. |
+| **Database (MySQL)** | `3306` | Standard MySQL port. The database name must be **`blogsite`**. |
+
+> **Troubleshooting:** If your React app starts on a different port (like 3001) because 3000 is busy, the backend will block the connection (CORS Error). Ensure Port 3000 is free before starting.
 
 ---
 
-## 💾 Step 2: Import the Tables (SQL Script)
+## ⚙️ Setup Instructions
 
-1.  Click on your new database (`blog_db`) in phpMyAdmin.
-2.  Click the **SQL** tab at the top.
-3.  Copy and paste the code below into the text box to create all necessary tables:
+### Step 1: Configure the Database
+1.  Open your browser and go to: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+2.  Click **New** on the left sidebar.
+3.  **Database Name:** Type `blogsite` (Must match the configuration in the backend).
+4.  **Collation:** Select `utf8mb4_general_ci`.
+5.  Click **Create**.
 
-```sql
--- 1. Create Users Table
-CREATE TABLE tblAccounts (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) DEFAULT 'USER'
-);
+### Step 2: Run the Backend (Spring Boot)
+1.  Navigate to the `backend` folder in your terminal:
+    ```bash
+    cd backend
+    ```
+2.  Run the application using the Maven Wrapper:
+    * **Windows:**
+        ```bash
+        mvnw spring-boot:run
+        ```
+    * **Mac/Linux:**
+        ```bash
+        ./mvnw spring-boot:run
+        ```
+3.  The backend will start on **http://localhost:8080**.
 
--- 2. Create Posts Table
-CREATE TABLE tblPosts (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    content TEXT,
-    author VARCHAR(255) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+### Step 3: Run the Frontend (React)
+1.  Open a new terminal window and navigate to the `frontend` folder:
+    ```bash
+    cd frontend
+    ```
+2.  Install the project dependencies (this downloads the `node_modules`):
+    ```bash
+    npm install
+    ```
+3.  Start the development server:
+    ```bash
+    npm start
+    ```
+4.  The application will open automatically at **http://localhost:3000**.
 
--- 3. Create Comments Table
-CREATE TABLE tblComments (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL,
-    post_id BIGINT NOT NULL,
-    content TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+---
+
+## 🔑 Default Access & Notes
+* **Register a User:** Navigate to the `/register` page to create an account.
+* **Admin Access:** To make a user an Admin, open **phpMyAdmin**, find the `tblAccounts` table, and manually change the `role` column of your user from `USER` to `ADMIN`.
